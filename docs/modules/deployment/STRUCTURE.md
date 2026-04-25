@@ -2,25 +2,31 @@
 
 ## Responsabilidad
 
-Describir artefactos y configuración de publicación.
+Describir artefactos y configuracion de publicacion.
 
 ## Estructura
 
 ```text
+vite.config.ts
+package.json
+package-lock.json
 wrangler.jsonc
-dist/
-├─ client/
+.output/
+├─ public/
 │  ├─ .assetsignore
 │  └─ assets/
 └─ server/
-   ├─ wrangler.json
-   └─ assets/
+   ├─ index.mjs
+   ├─ _ssr/
+   └─ _chunks/
 .wrangler/
 └─ deploy/
 ```
 
 ## Notas
 
-- `dist` se regenera con `npm run build`.
-- `.wrangler` puede contener datos locales de deploy.
-- Si algo falla en producción, revisar primero build, then Wrangler config y luego runtime.
+- `.output` se regenera con `npm run build`.
+- `.output` esta ignorado por git.
+- `dist` puede existir de builds anteriores, pero el build compatible con Vercel/Nitro usa `.output`.
+- `.wrangler` puede contener datos locales de deploy de Cloudflare.
+- Si algo falla en Vercel, revisar primero `npm run build`, luego `vite.config.ts`, y despues la configuracion del proyecto en Vercel.

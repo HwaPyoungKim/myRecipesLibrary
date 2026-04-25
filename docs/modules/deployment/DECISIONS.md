@@ -1,19 +1,25 @@
 # DECISIONS
 
-## Cloudflare Workers como target
+## Vercel como target principal
 
-- Decisión: configurar Wrangler con `@tanstack/react-start/server-entry`.
-- Justificación: alinea TanStack Start SSR con un runtime edge.
-- Trade off: algunas APIs Node requieren `nodejs_compat`.
+- Decision: hacer compatible el build con Vercel usando Nitro.
+- Justificacion: Vercel recomienda Nitro para aplicaciones TanStack Start existentes.
+- Trade off: el build local ahora produce `.output/` y agrega una capa adicional al pipeline.
 
-## `dist` como salida generada
+## Nitro como plugin de Vite
 
-- Decisión: build produce cliente y servidor en `dist`.
-- Justificación: separa fuente de artefactos publicables.
-- Trade off: abrir archivos de `dist` puede confundir porque no son editables de forma durable.
+- Decision: agregar `nitro()` dentro de la configuracion Vite que recibe `@lovable.dev/vite-tanstack-config`.
+- Justificacion: el wrapper existente ya incluye TanStack Start, React, Tailwind, aliases y otras integraciones; solo falta Nitro para Vercel.
+- Trade off: no se debe duplicar manualmente `tanstackStart()` ni `viteReact()`.
 
-## Compatibility date fija
+## Mantener Cloudflare como configuracion heredada
 
-- Decisión: `compatibility_date` está fijada en `2025-09-24`.
-- Justificación: estabiliza comportamiento de Workers.
-- Trade off: conviene revisarla al actualizar Wrangler o Cloudflare runtime.
+- Decision: conservar `wrangler.jsonc`.
+- Justificacion: no bloquea Vercel y preserva la opcion de volver a Cloudflare.
+- Trade off: el proyecto tiene dos rastros de despliegue; la documentacion debe aclarar cual es el target activo.
+
+## `.output` como salida generada
+
+- Decision: Nitro genera `.output`.
+- Justificacion: Vercel reconoce esta salida para desplegar assets y servidor.
+- Trade off: `.output` debe permanecer ignorado por git y no debe editarse a mano.

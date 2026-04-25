@@ -1,22 +1,25 @@
 # CONTEXT
 
-## Qué hace
+## Que hace
 
-El módulo de despliegue agrupa la salida de build y configuración de Cloudflare.
+El modulo de despliegue agrupa la salida de build y la configuracion necesaria para publicar la app SSR. El objetivo principal actual es Vercel mediante Nitro, manteniendo `wrangler.jsonc` como configuracion heredada para Cloudflare.
 
-## Qué problema resuelve
+## Que problema resuelve
 
-Permite construir la app SSR y prepararla para correr en un entorno compatible con Cloudflare Workers.
+Permite construir la aplicacion TanStack Start en un formato compatible con Vercel Functions. Nitro se integra como plugin de Vite y genera `.output/`, que contiene assets publicos y servidor SSR.
 
-## Cómo usarlo
+## Como usarlo
 
-- Ejecutar `npm run build` para generar `dist`.
-- Usar `wrangler.jsonc` como configuración de runtime.
-- No editar `dist` como código fuente; regenerarlo desde `src`.
+- Ejecutar `npm install` para instalar dependencias.
+- Ejecutar `npm run build` para generar `.output/`.
+- En Vercel, usar `npm install` como install command y `npm run build` como build command.
+- No editar `.output` ni `dist` como codigo fuente; regenerarlos desde `src`.
 
 ## Archivos relevantes
 
-- `wrangler.jsonc`: nombre, compatibility date, flags y entrypoint.
-- `dist/client`: assets cliente generados.
-- `dist/server`: bundle SSR generado.
-- `.wrangler`: estado/config local de Wrangler.
+- `vite.config.ts`: agrega el plugin `nitro()` encima de la configuracion TanStack existente.
+- `package.json`: incluye `nitro` como dependencia.
+- `package-lock.json`: fija la version instalada de Nitro y sus dependencias.
+- `.output/public`: assets cliente generados por Nitro.
+- `.output/server`: bundle SSR generado por Nitro.
+- `wrangler.jsonc`: configuracion Cloudflare heredada, no requerida para Vercel.
