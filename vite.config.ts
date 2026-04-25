@@ -9,6 +9,6 @@ import { nitro } from "nitro/vite";
 
 export default defineConfig({
   vite: {
-    plugins: [nitro()],
+    plugins: [nitro({ preset: "vercel" })],
   },
 });
